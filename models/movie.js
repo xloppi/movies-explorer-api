@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { isURL } = require('validator');
 
+const validateURL = (value) => isURL(value, { message: 'invalid URL', require_protocol: true });
+
 const userSchema = new mongoose.Schema({
   country: {
     type: String,
@@ -25,17 +27,17 @@ const userSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true,
-    validate: [isURL({ require_protocol: true }), 'invalid URL'],
+    validate: (v) => validateURL(v),
   },
   trailer: {
     type: String,
     required: true,
-    validate: [isURL({ require_protocol: true }), 'invalid URL'],
+    validate: (v) => validateURL(v),
   },
   thumbnail: {
     type: String,
     required: true,
-    validate: [isURL({ require_protocol: true }), 'invalid URL'],
+    validate: (v) => validateURL(v),
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
