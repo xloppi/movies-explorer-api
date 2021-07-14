@@ -11,6 +11,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
 const {
   login,
+  logout,
   createUser,
 } = require('./controllers/users');
 
@@ -62,6 +63,7 @@ app.post('/signup', celebrate({
     name: Joi.string().min(2).max(30),
   }),
 }), createUser);
+app.post('/signout', logout);
 
 app.use(auth);
 
