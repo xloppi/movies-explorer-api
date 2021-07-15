@@ -4,14 +4,14 @@
 
 Бэкенд для приложения movies-explorer.
 
-**Стек технологий:**
+## Стек технологий:
 
 ![](https://img.shields.io/badge/-JS-000000?style=for-the-badge&logo=JavaScript)
 ![](https://img.shields.io/badge/-Node.JS-000000?style=for-the-badge&logo=NODE.JS)
 ![](https://img.shields.io/badge/-express-000000?style=for-the-badge&logo=EXPRESS)
 ![](https://img.shields.io/badge/-MongoDB-000000?style=for-the-badge&logo=MONGODB)
 
-**Директории**
+## Директории
 
 `/routes` — папка с файлами роутера  
 `/controllers` — папка с файлами контроллеров пользователя и фильма   
@@ -19,12 +19,12 @@
 `/middlewares` — содержит мидлвару для проверки токена 
 `/errors` — папка содержит классы ошибок
   
-**Запуск проекта**
+## Запуск проекта
 
 `npm run start` — запускает сервер   
 `npm run dev` — запускает сервер с hot-reload
 
-**Запросы**
+## Запросы
 
 GET /users/me  - возвращает информацию о пользователе (email и имя)
 
@@ -43,7 +43,7 @@ POST /signin - проверяет переданные в теле почту и
 POST /signout - выход из профиля(удаляет токен)
 
 
-**Локальная установка:**
+## Локальная установка:
 1. Для работы необходимо установить Node.js и MongoDB.
 
 2. Скачать репозиторий.
@@ -61,7 +61,7 @@ npm run dev
 ```
 5. Если все сделано правильно, то можно будет отправлять запросы на: http://localhost:3000/. Запросы можно отправлять через Postman.
 
-**Ссылки на проект**
+## Ссылки на проект
 
 1. https://api.hlopkov-movies-exp.nomoredomains.monster
 2. Публичный ip - 84.252.136.157
