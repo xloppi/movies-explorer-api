@@ -26,7 +26,7 @@ router.post('/', celebrate({
     image: Joi.string().required().custom(validateURL),
     trailer: Joi.string().required().custom(validateURL),
     thumbnail: Joi.string().required().custom(validateURL),
-    movieId: Joi.string().hex().length(24).required(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
@@ -38,22 +38,3 @@ router.delete('/:movieId', celebrate({
 }), deleteMovie);
 
 module.exports = router;
-/*
-# возвращает все сохранённые пользователем фильмы
-GET /movies
-
-# создаёт фильм с переданными в теле
-# country,
- director, duration, year, description, image, trailer, nameRU, nameEN и thumbnail, movieId
-POST /movies
-
-# удаляет сохранённый фильм по id
-DELETE /movies/movieId
-*/
-
-/* link: Joi.string().required().custom((value, helpers) => {
-  if (isURL(value, { require_protocol: true })) {
-    return value;
-  }
-  return helpers.error('any.invalid');
-}) */
