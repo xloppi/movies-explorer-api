@@ -3,17 +3,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi, errors } = require('celebrate');
+const { errors } = require('celebrate');
 const helmet = require('helmet');
 const cors = require('cors');
 const routes = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const auth = require('./middlewares/auth');
-const {
-  login,
-  logout,
-  createUser,
-} = require('./controllers/users');
 
 const CORS_WHITELIST = [
   'http://localhost:3000',
@@ -49,23 +43,6 @@ app.use(cookieParser());
 app.use(requestLogger);
 
 app.use(cors(corsOption));
-
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
-  }),
-}), createUser);
-app.post('/signout', logout);
-
-app.use(auth);
 
 app.use(routes);
 
