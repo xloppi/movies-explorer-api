@@ -25,7 +25,7 @@ const corsOption = {
 };
 
 const {
-  PORT_ENV,
+  ENV_PORT,
   MONGO_DB_URL,
   MONGO_DB_CONFIG,
 } = require('./utils/conf');
@@ -51,4 +51,4 @@ app.use(errors());
 
 app.use(errorHandler);
 
-app.listen(PORT_ENV);
+app.listen(ENV_PORT);

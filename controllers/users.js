@@ -5,6 +5,15 @@ const NotFoundError = require('../errors/not-found-err');
 const AuthError = require('../errors/auth-err');
 const ValidationError = require('../errors/validation-err');
 const ConflictingError = require('../errors/conflicting-request-err');
+const {
+  USER_NOT_FOUND,
+  INVALID_UPDATE_PROFILE,
+  USER_ALREADY_EX,
+  INVALID_DATA_USER,
+  LOGIN_NOT_SUCCESS,
+  LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
+} = require('../utils/const_messages');
 
 const { NODE_ENV, JWT_SECRET_KEY, SALT_R } = require('../utils/conf');
 
@@ -14,12 +23,12 @@ const getMe = (req, res, next) => {
       if (user) {
         res.status(200).send(user);
       } else {
-        throw new NotFoundError('Пользователь с указанным _id не найден');
+        throw new NotFoundError(USER_NOT_FOUND);
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        return next(new ValidationError('Переданы некорректные данные при обновлении профиля'));
+        return next(new ValidationError(INVALID_UPDATE_PROFILE));
       }
       return next(err);
     });
@@ -38,7 +47,7 @@ const createUser = (req, res, next) => {
     User.findOne({ email })
       .then((userEmail) => {
         if (userEmail) {
-          throw new ConflictingError('Такой пользователь уже существует');
+          throw new ConflictingError(USER_ALREADY_EX);
         }
 
         return User.create({
@@ -56,7 +65,7 @@ const createUser = (req, res, next) => {
       })
       .catch((err) => {
         if (err.name === 'ValidationError' || err.name === 'CastError') {
-          return next(new ValidationError('Переданы некорректные данные при создании пользователя'));
+          return next(new ValidationError(INVALID_DATA_USER));
         }
         return next(err);
       });
@@ -70,13 +79,13 @@ const updateProfile = (req, res, next) => User.findByIdAndUpdate(
 )
   .then((user) => {
     if (!user) {
-      throw new NotFoundError('Пользователь с указанным _id не найден');
+      throw new NotFoundError(USER_NOT_FOUND);
     }
     res.status(200).send(user);
   })
   .catch((err) => {
     if (err.name === 'ValidationError' || err.name === 'CastError') {
-      return next(new ValidationError('Переданы некорректные данные при обновлении профиля'));
+      return next(new ValidationError(INVALID_UPDATE_PROFILE));
     }
     return next(err);
   });
@@ -87,7 +96,7 @@ const login = (req, res, next) => {
   return User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw next(new AuthError('Не правильная почта или пароль'));
+        throw next(new AuthError(LOGIN_NOT_SUCCESS));
       }
 
       return bcrypt.compare(
@@ -95,7 +104,7 @@ const login = (req, res, next) => {
         user.password,
         (err, isValid) => {
           if (!isValid) {
-            return next(new AuthError('Не правильная почта или пароль'));
+            return next(new AuthError(LOGIN_NOT_SUCCESS));
           }
 
           const token = jwt.sign(
@@ -110,14 +119,14 @@ const login = (req, res, next) => {
               SameSite: 'None',
               secure: NODE_ENV === 'production',
             })
-            .send({ message: 'Авторизация прошла успешно' });
+            .send({ message: LOGIN_SUCCESS });
         },
       );
     })
     .catch(next);
 };
 
-const logout = (req, res) => res.clearCookie('jwt').send({ message: 'Выход из профиля прошел успешно' });
+const logout = (req, res) => res.clearCookie('jwt').send({ message: LOGOUT_SUCCESS });
 
 module.exports = {
   getMe,
