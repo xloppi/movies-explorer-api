@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -25,18 +24,17 @@ const corsOption = {
   },
 };
 
-const { PORT = 3000, MONGO_URL, NODE_ENV } = process.env;
+const {
+  PORT_ENV,
+  MONGO_DB_URL,
+  MONGO_DB_CONFIG,
+} = require('./utils/conf');
 
 const app = express();
 
 app.use(helmet());
 
-mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : 'mongodb://localhost:27017/bitfilmsdb', {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-});
+mongoose.connect(MONGO_DB_URL, MONGO_DB_CONFIG);
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -53,4 +51,4 @@ app.use(errors());
 
 app.use(errorHandler);
 
-app.listen(PORT);
+app.listen(PORT_ENV);

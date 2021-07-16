@@ -6,7 +6,7 @@ const AuthError = require('../errors/auth-err');
 const ValidationError = require('../errors/validation-err');
 const ConflictingError = require('../errors/conflicting-request-err');
 
-const { NODE_ENV, JWT_SECRET, SALT_ROUNDS } = process.env;
+const { NODE_ENV, JWT_SECRET_KEY, SALT_R } = require('../utils/conf');
 
 const getMe = (req, res, next) => {
   User.findById(req.user._id)
@@ -34,7 +34,7 @@ const createUser = (req, res, next) => {
     password,
   } = req.body;
 
-  return bcrypt.hash(password, NODE_ENV === 'production' ? Number(SALT_ROUNDS) : 10, (error, hash) => {
+  return bcrypt.hash(password, SALT_R, (error, hash) => {
     User.findOne({ email })
       .then((userEmail) => {
         if (userEmail) {
@@ -100,7 +100,7 @@ const login = (req, res, next) => {
 
           const token = jwt.sign(
             { _id: user._id },
-            NODE_ENV === 'production' ? JWT_SECRET : 'superpupernikogdanepodbereshkey',
+            JWT_SECRET_KEY,
             { expiresIn: '7d' },
           );
           return res
