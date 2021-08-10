@@ -11,11 +11,10 @@ const {
   USER_ALREADY_EX,
   INVALID_DATA_USER,
   LOGIN_NOT_SUCCESS,
-  LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
 } = require('../utils/const_messages');
 
-const { NODE_ENV, JWT_SECRET_KEY, SALT_R } = require('../utils/conf');
+const { JWT_SECRET_KEY, SALT_R } = require('../utils/conf');
 
 const getMe = (req, res, next) => {
   User.findById(req.user._id)
@@ -113,13 +112,18 @@ const login = (req, res, next) => {
             { expiresIn: '7d' },
           );
           return res
+            .send({ token });
+
+          // Для отправки токена через куки,
+          // в последнем этапе нужно было настроить авторизацию через хедер и local.storage
+          /* return res
             .cookie('jwt', token, {
               maxAge: 3600000 * 24 * 7,
               httpOnly: true,
               SameSite: 'None',
               secure: NODE_ENV === 'production',
             })
-            .send({ message: LOGIN_SUCCESS });
+            .send({ message: LOGIN_SUCCESS }); */
         },
       );
     })
