@@ -12,6 +12,8 @@ const errorHandler = require('./middlewares/error-handler');
 const CORS_WHITELIST = [
   'http://localhost:3000',
   'https://localhost:3000',
+  'http://api.hlopkov-movies-exp.nomoredomains.monster',
+  'https://api.hlopkov-movies-exp.nomoredomains.monster',
 ];
 const corsOption = {
   credentials: true,
